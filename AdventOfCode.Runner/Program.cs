@@ -6,4 +6,6 @@ table.AddColumns(
     new TableColumn("Result"),
     new TableColumn("Time Taken"));
 
+table.AddRow(1, 1, Day1.SolvePart1);
+
 AnsiConsole.Write(table);
