@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics;
-using AdventOfCode.Runner.Utils;
-using static AdventOfCode.Core.Utils.FileReader;
 
 namespace AdventOfCode.Runner.Utils;
 
@@ -8,7 +6,7 @@ internal static class TableExtensions
 {
     internal static Table AddRow(this Table table, int day, int part, Func<string, string> func)
     {
-        var input = Read(day);
+        var input = File.ReadAllText($"./Data/Day{day}.txt");
 
         var stopwatch = new Stopwatch();
         stopwatch.Start();
