@@ -2,9 +2,9 @@
 
 public static class LineSplitter
 {
-    public static IEnumerable<string> SplitLines(this string input)
+    public static List<string> SplitLines(this string input)
     {
-        return input.Split(Environment.NewLine);
+        return [.. input.Split(Environment.NewLine)];
     }
 
     public static string JoinLines(this IEnumerable<string> input)
