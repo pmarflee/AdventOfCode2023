@@ -8,21 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Data\Day1.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Data\Day1.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\AdventOfCode.Core\AdventOfCode.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="spectre.console" Version="0.48.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data\Day1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Day2.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
