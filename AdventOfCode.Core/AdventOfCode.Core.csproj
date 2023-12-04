@@ -10,4 +10,8 @@
     <None Remove="Days\Day1.txt" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Parlot" Version="0.0.24" />
+  </ItemGroup>
+
 </Project>
