@@ -18,32 +18,32 @@ public class Day2TestFixture
     [
         new(1,
         [
-            [new(Colour.Blue, 3), new(Colour.Red, 4)],
-            [new(Colour.Red, 1), new(Colour.Green, 2), new(Colour.Blue, 6)],
-            [new(Colour.Green, 2)]
+            new([new(Colour.Blue, 3), new(Colour.Red, 4)]),
+            new([new(Colour.Red, 1), new(Colour.Green, 2), new(Colour.Blue, 6)]),
+            new([new(Colour.Green, 2)])
         ]),
         new(2,
         [
-            [new(Colour.Blue, 1), new(Colour.Green, 2)],
-            [new(Colour.Green, 3), new(Colour.Blue, 4), new(Colour.Red, 1)],
-            [new(Colour.Green, 1), new(Colour.Blue, 1)]
+            new([new(Colour.Blue, 1), new(Colour.Green, 2)]),
+            new([new(Colour.Green, 3), new(Colour.Blue, 4), new(Colour.Red, 1)]),
+            new([new(Colour.Green, 1), new(Colour.Blue, 1)])
         ]),
         new(3,
         [
-            [new(Colour.Green, 8), new(Colour.Blue, 6), new(Colour.Red, 20)],
-            [new(Colour.Blue, 5), new(Colour.Red, 4), new(Colour.Green, 13)],
-            [new(Colour.Green, 5), new(Colour.Red, 1)]
+            new([new(Colour.Green, 8), new(Colour.Blue, 6), new(Colour.Red, 20)]),
+            new([new(Colour.Blue, 5), new(Colour.Red, 4), new(Colour.Green, 13)]),
+            new([new(Colour.Green, 5), new(Colour.Red, 1)])
         ]),
         new(4,
         [
-            [new(Colour.Green, 1), new(Colour.Red, 3), new(Colour.Blue, 6)],
-            [new(Colour.Green, 3), new(Colour.Red, 6)],
-            [new(Colour.Green, 3), new(Colour.Blue, 15), new(Colour.Red, 14)]
+            new([new(Colour.Green, 1), new(Colour.Red, 3), new(Colour.Blue, 6)]),
+            new([new(Colour.Green, 3), new(Colour.Red, 6)]),
+            new([new(Colour.Green, 3), new(Colour.Blue, 15), new(Colour.Red, 14)])
         ]),
         new(5,
         [
-            [new(Colour.Red, 6), new(Colour.Blue, 1), new(Colour.Green, 3)],
-            [new(Colour.Blue, 2), new(Colour.Red, 1), new(Colour.Green, 2)]
+            new([new(Colour.Red, 6), new(Colour.Blue, 1), new(Colour.Green, 3)]),
+            new([new(Colour.Blue, 2), new(Colour.Red, 1), new(Colour.Green, 2)])
         ])
     ];
 
@@ -52,6 +52,12 @@ public class Day2TestFixture
     public void TestParser(string line, Game expected)
     {
         Assert.Equivalent(expected, Day2.Parse(line));
+    }
+
+    [Fact]
+    public void TestPart1()
+    {
+        Assert.Equal("8", Day2.SolvePart1(Lines.JoinLines()));
     }
 
     public static IEnumerable<object[]> GetParserTestCases()
