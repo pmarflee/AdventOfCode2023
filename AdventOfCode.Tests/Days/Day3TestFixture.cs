@@ -21,4 +21,10 @@ public class Day3TestFixture
     {
         Assert.Equal("4361", Day3.SolvePart1(Lines.JoinLines()));
     }
+
+    [Fact]
+    public void TestPart2()
+    {
+        Assert.Equal("467835", Day3.SolvePart2(Lines.JoinLines()));
+    }
 }

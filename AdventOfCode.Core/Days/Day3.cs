@@ -4,23 +4,37 @@ public class Day3 : IDay
 {
     public static string SolvePart1(string input)
     {
-        return new EngineSchematic(input.SplitLines()).PartNumbers.Sum().ToString();
+        return CreateSchematic(input).GetPartNumbers().Sum().ToString();
     }
 
     public static string SolvePart2(string input)
     {
-        throw new NotImplementedException();
+        var schematic = CreateSchematic(input);
+
+        return (from number in schematic.Numbers
+                from symbol in number.GetAdjacentSymbols(schematic.Symbols)
+                where symbol.Value == '*'
+                group number by symbol into grouped
+                where grouped.Count() == 2
+                select grouped.First().Value * grouped.Last().Value).Sum().ToString();
     }
 
-    class Number(long row, Range columns, long value)
+    public static EngineSchematic CreateSchematic(string input) => new(input.SplitLines());
+
+    public class Number(long row, Range columns, long value)
     {
         private readonly HashSet<(long, long)> AdjacentLocations = new(GetAdjacentLocations(row, columns));
 
         public long Value { get; } = value;
 
-        public bool IsPartNumber(List<(long, long)> symbolLocations)
+        public bool IsPartNumber(IEnumerable<Symbol> symbols)
         {
-            return symbolLocations.Any(AdjacentLocations.Contains);
+            return GetAdjacentSymbols(symbols).Any();
+        }
+
+        public IEnumerable<Symbol> GetAdjacentSymbols(IEnumerable<Symbol> symbols)
+        {
+            return symbols.Where(symbol => AdjacentLocations.Contains((symbol.Row, symbol.Column)));
         }
 
         private static IEnumerable<(long, long)> GetAdjacentLocations(long row, Range columns)
@@ -48,10 +62,12 @@ public class Day3 : IDay
         }
     }
 
+    public record Symbol(char Value, long Row, long Column);
+
     public class EngineSchematic
     {
-        private readonly List<Number> Numbers = [];
-        private readonly List<(long, long)> SymbolLocations = [];
+        private readonly List<Number> _numbers = [];
+        private readonly List<Symbol> _symbols = [];
 
         public EngineSchematic(List<string> lines)
         {
@@ -66,7 +82,7 @@ public class Day3 : IDay
 
                     if (value.HasValue)
                     {
-                        Numbers.Add(new(row, digitColumns[0]..digitColumns[^1], value.Value));
+                        _numbers.Add(new(row, digitColumns[0]..digitColumns[^1], value.Value));
 
                         digits = null;
                         digitColumns.Clear();
@@ -88,7 +104,7 @@ public class Day3 : IDay
 
                         if (c != '.')
                         {
-                            SymbolLocations.Add((row, column));
+                            _symbols.Add(new(c, row, column));
                         }
                     }
                 }
@@ -97,9 +113,11 @@ public class Day3 : IDay
             }
         }
 
-        public IEnumerable<long> PartNumbers =>
-            from number in Numbers
-            where number.IsPartNumber(SymbolLocations)
-            select number.Value;
+        public IEnumerable<long> GetPartNumbers() => from number in _numbers
+                                                     where number.IsPartNumber(_symbols)
+                                                     select number.Value;
+
+        public IEnumerable<Symbol> Symbols => _symbols;
+        public IEnumerable<Number> Numbers => _numbers;
     }
 }
