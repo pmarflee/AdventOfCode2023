@@ -17,4 +17,10 @@ public class Day4TestFixture
     {
         Assert.Equal("13", Day4.SolvePart1(Lines.JoinLines()));
     }
+
+    [Fact]
+    public void TestPart2()
+    {
+        Assert.Equal("30", Day4.SolvePart2(Lines.JoinLines()));
+    }
 }
