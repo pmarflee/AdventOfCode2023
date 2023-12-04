@@ -11,8 +11,7 @@ public class Day2 : IDay
             new Cubes(Colour.Blue, 14)
         ]);
 
-        return input.SplitLines()
-            .Select(Parse)
+        return ParseGames(input)
             .Where(game => game.Selections.All(
                 selection =>
                     selection.TotalRed <= expected.TotalRed &&
@@ -25,10 +24,20 @@ public class Day2 : IDay
 
     public static string SolvePart2(string input)
     {
-        throw new NotImplementedException();
+        return ParseGames(input)
+            .Select(game => new
+            {
+                MinRed = game.Selections.Max(s => s.TotalRed),
+                MinBlue = game.Selections.Max(s => s.TotalBlue),
+                MinGreen = game.Selections.Max(s => s.TotalGreen)
+            })
+            .Sum(s => s.MinRed * s.MinBlue * s.MinGreen)
+            .ToString();
     }
 
-    public static Game Parse(string line) => Parser.Parse(line);
+    public static IEnumerable<Game> ParseGames(string input) => input.SplitLines().Select(ParseGame);
+
+    public static Game ParseGame(string line) => Parser.Parse(line);
 
     public enum Colour
     {
@@ -45,7 +54,7 @@ public class Day2 : IDay
         public long TotalBlue => Total(Colour.Blue);
         public long TotalGreen => Total(Colour.Green);
 
-        private long Total(Colour colour) => Cubes.Where(c => c.Colour == colour).Sum(c => c.Amount);
+        private long Total(Colour colour) => Cubes.FirstOrDefault(c => c.Colour == colour)?.Amount ?? 0;
     }
 
     public record Game(long Number, List<Selection> Selections);

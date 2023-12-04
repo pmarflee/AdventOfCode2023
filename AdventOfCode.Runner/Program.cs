@@ -9,5 +9,6 @@ table.AddColumns(
 table.AddRow(1, 1, Day1.SolvePart1);
 table.AddRow(1, 2, Day1.SolvePart2);
 table.AddRow(2, 1, Day2.SolvePart1);
+table.AddRow(2, 2, Day2.SolvePart2);
 
 AnsiConsole.Write(table);

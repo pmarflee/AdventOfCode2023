@@ -51,13 +51,19 @@ public class Day2TestFixture
     [MemberData(nameof(GetParserTestCases))]
     public void TestParser(string line, Game expected)
     {
-        Assert.Equivalent(expected, Day2.Parse(line));
+        Assert.Equivalent(expected, Day2.ParseGame(line));
     }
 
     [Fact]
     public void TestPart1()
     {
         Assert.Equal("8", Day2.SolvePart1(Lines.JoinLines()));
+    }
+
+    [Fact]
+    public void TestPart2()
+    {
+        Assert.Equal("2286", Day2.SolvePart2(Lines.JoinLines()));
     }
 
     public static IEnumerable<object[]> GetParserTestCases()
