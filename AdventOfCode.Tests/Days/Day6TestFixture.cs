@@ -10,7 +10,7 @@ public class Day6TestFixture
         Distance:  9  40  200
         """;
 
-    private static readonly List<Race> Input =
+    private static readonly List<Race> InputPart1 =
     [
         new(7, 9),
         new(15, 40),
@@ -18,11 +18,19 @@ public class Day6TestFixture
     ];
 
     [Fact]
-    public void TestParser()
+    public void TestPart1Parser()
     {
-        var input = ParseInput(InputString);
+        var input = ParseInputPart1(InputString);
 
-        Assert.Equivalent(Input, input);
+        Assert.Equivalent(InputPart1, input);
+    }
+
+    [Fact]
+    public void TestPart2Parser()
+    {
+        var input = ParseInputPart2(InputString);
+
+        Assert.Equivalent(new Race(71530, 940200), input);
     }
 
     [Fact]
@@ -34,6 +42,6 @@ public class Day6TestFixture
     [Fact]
     public void TestPart2()
     {
-        throw new NotImplementedException();
+        Assert.Equal("71503", SolvePart2(InputString));
     }
 }
