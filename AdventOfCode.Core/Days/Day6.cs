@@ -8,14 +8,32 @@ public class Day6 : IDay
 
         public long GetNumberOfWaysToBeatRecord()
         {
-            long seconds = 1;
+            long min = 0;
+            long max = Time;
 
-            while (GetDistance(seconds) <= RecordDistance)
+            while (min <= max)
             {
-                seconds++;
+                long middle = (max + min) / 2;
+                long distanceCurrent = GetDistance(middle);
+
+                if (distanceCurrent > RecordDistance)
+                {
+                    long distancePrevious = GetDistance(middle - 1);
+                    
+                    if (distancePrevious <= RecordDistance)
+                    {
+                        return Time - (middle + middle) + 1;
+                    }
+
+                    max = middle - 1;
+                }
+                else
+                {
+                    min = middle + 1;
+                }
             }
 
-            return Time - (seconds + seconds) + 1;
+            throw new Exception("Unable to calculate result");
         }
     }
 
