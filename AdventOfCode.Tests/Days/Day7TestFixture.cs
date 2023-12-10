@@ -15,41 +15,11 @@ public class Day7TestFixture
 
     private readonly List<Hand> Input =
     [
-        new([
-            CamelCards.Card.Three,
-            CamelCards.Card.Two,
-            CamelCards.Card.T,
-            CamelCards.Card.Three,
-            CamelCards.Card.K
-         ], 765),
-        new([
-            CamelCards.Card.T,
-            CamelCards.Card.Five,
-            CamelCards.Card.Five,
-            CamelCards.Card.J,
-            CamelCards.Card.Five
-         ], 684),
-        new([
-            CamelCards.Card.K,
-            CamelCards.Card.K,
-            CamelCards.Card.Six,
-            CamelCards.Card.Seven,
-            CamelCards.Card.Seven
-         ], 28),
-        new([
-            CamelCards.Card.K,
-            CamelCards.Card.T,
-            CamelCards.Card.J,
-            CamelCards.Card.J,
-            CamelCards.Card.T
-         ], 220),
-        new([
-            CamelCards.Card.Q,
-            CamelCards.Card.Q,
-            CamelCards.Card.Q,
-            CamelCards.Card.J,
-            CamelCards.Card.A
-         ], 483),
+        new([ Card.Three, Card.Two, Card.T, Card.Three, Card.K ], 765),
+        new([ Card.T, Card.Five, Card.Five, Card.J, Card.Five ], 684),
+        new([ Card.K, Card.K, Card.Six, Card.Seven, Card.Seven ], 28),
+        new([ Card.K, Card.T, Card.J, Card.J, Card.T ], 220),
+        new([ Card.Q, Card.Q, Card.Q, Card.J, Card.A ], 483)
     ];
 
     [Fact]
@@ -61,7 +31,7 @@ public class Day7TestFixture
     [Fact]
     public void TestPart1()
     {
-        throw new NotImplementedException();
+        SolvePart1(InputString).Should().Be("6440");
     }
 
     [Fact]
