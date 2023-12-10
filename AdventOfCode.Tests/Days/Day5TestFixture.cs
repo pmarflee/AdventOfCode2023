@@ -42,7 +42,7 @@ public class Day5TestFixture
         """;
 
     private static readonly Almanac Input = new(
-        [new(79), new(14), new(55), new(13)],
+        [79, 14, 55, 13],
         [
             new Map(
                 "seed-to-soil map",
@@ -104,5 +104,11 @@ public class Day5TestFixture
     public void TestPart1()
     {
         Assert.Equal("35", SolvePart1(InputString));
+    }
+
+    [Fact]
+    public void TestPart2()
+    {
+        Assert.Equal("46", SolvePart2(InputString));
     }
 }
