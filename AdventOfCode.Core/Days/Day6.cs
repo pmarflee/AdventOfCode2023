@@ -6,9 +6,17 @@ public class Day6 : IDay
     {
         public long GetDistance(long seconds) => seconds * (Time - seconds);
 
-        public long GetNumberOfWaysToBeatRecord() => 
-            Enumerable.Range(1, (int)Time - 1)
-            .Count(seconds => GetDistance(seconds) > RecordDistance);
+        public long GetNumberOfWaysToBeatRecord()
+        {
+            long seconds = 1;
+
+            while (GetDistance(seconds) <= RecordDistance)
+            {
+                seconds++;
+            }
+
+            return Time - (seconds + seconds) + 1;
+        }
     }
 
     public static string SolvePart1(string input)
