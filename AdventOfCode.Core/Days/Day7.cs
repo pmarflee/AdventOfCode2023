@@ -72,39 +72,8 @@ public class Day7 : IDay
         (HighCard, Type.HighCard)
     ];
 
-    public record Hand(List<Card> Cards, long Bid) : IComparable<Hand>
+    public record Hand(List<Card> Cards, long Bid)
     {
-        Type Type
-        {
-            get
-            {
-                var set = Cards
-                    .GroupBy(c => c)
-                    .Select(g => g.Count())
-                    .OrderByDescending(c => c)
-                    .ToList();
-
-                var (_, type) = Scorers.First(scorer => scorer.Item1(set));
-
-                return type;
-            }
-        }
-
-        public int CompareTo(Hand? other)
-        {
-            if (other == null) return 1;
-
-            var type = Type;
-            var otherType = other.Type;
-
-            if (type > otherType) return 1;
-            if (type < otherType) return -1;
-
-            return Cards.Zip(other.Cards, (c, o) => new { Card = c, Other = o })
-                .Select(pair => pair.Card.CompareTo(pair.Other))
-                .FirstOrDefault(v => v != 0);
-        }
-
         public override string ToString()
         {
             return string.Concat(Cards.Select(c => CardsToCharacters[c]));
@@ -113,19 +82,121 @@ public class Day7 : IDay
 
     public static string SolvePart1(string input)
     {
-        var hands = ParseInput(input);
-
-        hands.Sort();
-
-        return hands.Select((hand, i) => hand.Bid * (i + 1)).Sum().ToString();
+        return Solve(input, new Part1TypeGrouper(), Comparer<Card>.Default);
     }
 
     public static string SolvePart2(string input)
     {
-        throw new NotImplementedException();
+        return Solve(input, new Part2TypeGrouper(), new SecondOrderingRuleComparer());
+    }
+
+    static string Solve(string input, ITypeGrouper typeGrouper, IComparer<Card> secondOrderingRuleComparer)
+    {
+        return ParseInput(input)
+            .Order(new HandComparer(typeGrouper, secondOrderingRuleComparer))
+            .Select((hand, i) => hand.Bid * (i + 1))
+            .Sum()
+            .ToString();
     }
 
     public static List<Hand> ParseInput(string input) => Parser.Parse(input);
+
+    class HandComparer(ITypeGrouper typeGrouper, IComparer<Card> secondOrderingRuleComparer) : Comparer<Hand>
+    {
+        private readonly ITypeGrouper _typeGrouper = typeGrouper;
+        private readonly IComparer<Card> _secondOrderingRuleComparer = secondOrderingRuleComparer;
+
+        private readonly Dictionary<Hand, Type> _handTypes = [];
+
+        public override int Compare(Hand? x, Hand? y)
+        {
+            if (x == null && y == null) return 0;
+            if (x == null) return -1;
+            if (y == null) return 1;
+
+            var xType = GetType(x);
+            var yType = GetType(y);
+
+            if (xType > yType) return 1;
+            if (xType < yType) return -1;
+
+            return x.Cards.Zip(y.Cards, (c, o) => new { Card = c, Other = o })
+                .Select(pair => _secondOrderingRuleComparer.Compare(pair.Card, pair.Other))
+                .FirstOrDefault(v => v != 0);
+        }
+
+        private Type GetType(Hand hand)
+        {
+            if (_handTypes.TryGetValue(hand, out var cachedType)) return cachedType;
+
+            var set = _typeGrouper.Group(hand.Cards);
+            var (_, type) = Scorers.First(scorer => scorer.Item1(set));
+
+            _handTypes.TryAdd(hand, type);
+
+            return type;
+        }
+    }
+
+    interface ITypeGrouper
+    {
+        List<int> Group(List<Card> cards);
+    }
+
+    class Part1TypeGrouper : ITypeGrouper
+    {
+        public List<int> Group(List<Card> cards)
+        {
+            return cards
+                .GroupBy(c => c)
+                .Select(g => g.Count())
+                .OrderByDescending(c => c)
+                .ToList();
+        }
+    }
+
+    class Part2TypeGrouper : ITypeGrouper
+    {
+        public List<int> Group(List<Card> cards)
+        {
+            var groups = cards
+                .GroupBy(c => c)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            if (groups.TryGetValue(Card.J, out var jokers))
+            {
+                var itemToUpdate = groups
+                    .Where(kv => kv.Key != Card.J)
+                    .OrderByDescending(kv => kv.Value)
+                    .FirstOrDefault();
+
+                if (itemToUpdate.Key != default)
+                {
+                    groups[itemToUpdate.Key] = groups[itemToUpdate.Key] + jokers;
+                    groups.Remove(Card.J);
+                }
+            }
+
+            return groups
+                .OrderByDescending(kv => kv.Value)
+                .Select(kv => kv.Value)
+                .ToList();
+        }
+    }
+
+    class SecondOrderingRuleComparer : Comparer<Card>
+    {
+        public override int Compare(Card x, Card y)
+        {
+            return (x, y) switch
+            {
+                var (x1, y1) when x1 == y1 => 0,
+                (Card.J, _) => -1,
+                (_, Card.J) => 1,
+                var (x1, y1) => x1.CompareTo(y1)
+            };
+        }
+    }
 
     static class Parser
     {

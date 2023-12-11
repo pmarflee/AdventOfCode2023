@@ -37,6 +37,6 @@ public class Day7TestFixture
     [Fact]
     public void TestPart2()
     {
-        throw new NotImplementedException();
+        SolvePart2(InputString).Should().Be("5905");
     }
 }

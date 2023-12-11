@@ -24,6 +24,7 @@ table.AddRow(5, 2, Day5.SolvePart2);
 table.AddRow(6, 1, Day6.SolvePart1);
 table.AddRow(6, 2, Day6.SolvePart2);
 table.AddRow(7, 1, Day7.SolvePart1);
+table.AddRow(7, 2, Day7.SolvePart2);
 
 stopwatch.Stop();
 
