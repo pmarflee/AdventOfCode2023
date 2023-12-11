@@ -4,7 +4,8 @@ namespace AdventOfCode.Tests.Days;
 
 public class Day8TestFixture
 {
-    const string InputString =
+    static readonly string[] InputStrings =
+    [
         $"""
         RL
 
@@ -15,36 +16,65 @@ public class Day8TestFixture
         EEE = (EEE, EEE)
         GGG = (GGG, GGG)
         ZZZ = (ZZZ, ZZZ)
-        """;
+        """,
+        $"""
+        LLR
 
-    static readonly Documents Input = new(
-        [Instruction.Right, Instruction.Left],
-        new Dictionary<string, (string, string)> 
-        {
-            ["AAA"] = ("BBB", "CCC"),
-            ["BBB"] = ("DDD", "EEE"),
-            ["CCC"] = ("ZZZ", "GGG"),
-            ["DDD"] = ("DDD", "DDD"),
-            ["EEE"] = ("EEE", "EEE"),
-            ["GGG"] = ("GGG", "GGG"),
-            ["ZZZ"] = ("ZZZ", "ZZZ")
-        });
+        AAA = (BBB, BBB)
+        BBB = (AAA, ZZZ)
+        ZZZ = (ZZZ, ZZZ)
+        """
+    ];
 
-    [Fact]
-    public void TestParser()
+    static readonly Desert[] Inputs =
+    [
+        new([Instruction.Right, Instruction.Left],
+            new Dictionary<string, (string, string)> 
+            {
+                ["AAA"] = ("BBB", "CCC"),
+                ["BBB"] = ("DDD", "EEE"),
+                ["CCC"] = ("ZZZ", "GGG"),
+                ["DDD"] = ("DDD", "DDD"),
+                ["EEE"] = ("EEE", "EEE"),
+                ["GGG"] = ("GGG", "GGG"),
+                ["ZZZ"] = ("ZZZ", "ZZZ")
+            }),
+        new([Instruction.Left, Instruction.Left, Instruction.Left],
+            new Dictionary<string, (string, string)> 
+            {
+                ["AAA"] = ("BBB", "BBB"),
+                ["BBB"] = ("AAA", "ZZZ"),
+                ["ZZZ"] = ("ZZZ", "ZZZ")
+            })
+    ];
+
+    [Theory]
+    [MemberData(nameof(GetParserTestCases))]
+    public void TestParser(string input, Desert expected)
     {
-        ParseInput(InputString).Should().BeEquivalentTo(Input);
+        ParseInput(input).Should().BeEquivalentTo(expected);
     }
 
-    [Fact]
-    public void TestPart1()
+    [Theory]
+    [MemberData(nameof(GetPart1TestCases))]
+    public void TestPart1(string input, string expected)
     {
-        throw new NotImplementedException();
+        SolvePart1(input).Should().Be(expected);
     }
 
     [Fact]
     public void TestPart2()
     {
         throw new NotImplementedException();
+    }
+
+    public static IEnumerable<object[]> GetParserTestCases()
+    {
+        return InputStrings.Zip(Inputs, (s, i) => new object[] { s, i });
+    }
+
+    public static IEnumerable<object[]> GetPart1TestCases()
+    {
+        return InputStrings.Zip(["2", "6"], (s, i) => new object[] { s, i });
     }
 }
