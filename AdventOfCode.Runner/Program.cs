@@ -26,6 +26,7 @@ table.AddRow(6, 2, Day6.SolvePart2);
 table.AddRow(7, 1, Day7.SolvePart1);
 table.AddRow(7, 2, Day7.SolvePart2);
 table.AddRow(8, 1, Day8.SolvePart1);
+//table.AddRow(8, 2, Day8.SolvePart2);
 
 stopwatch.Stop();
 
