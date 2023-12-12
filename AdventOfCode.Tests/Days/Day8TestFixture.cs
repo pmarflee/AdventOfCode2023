@@ -26,7 +26,7 @@ public class Day8TestFixture
         """
     ];
 
-    static readonly Desert[] Inputs =
+    static readonly Documents[] Inputs =
     [
         new([Instruction.Right, Instruction.Left],
             new Dictionary<string, (string, string)> 
@@ -39,7 +39,7 @@ public class Day8TestFixture
                 ["GGG"] = ("GGG", "GGG"),
                 ["ZZZ"] = ("ZZZ", "ZZZ")
             }),
-        new([Instruction.Left, Instruction.Left, Instruction.Left],
+        new([Instruction.Left, Instruction.Left, Instruction.Right],
             new Dictionary<string, (string, string)> 
             {
                 ["AAA"] = ("BBB", "BBB"),
@@ -50,7 +50,7 @@ public class Day8TestFixture
 
     [Theory]
     [MemberData(nameof(GetParserTestCases))]
-    public void TestParser(string input, Desert expected)
+    public void TestParser(string input, Documents expected)
     {
         ParseInput(input).Should().BeEquivalentTo(expected);
     }

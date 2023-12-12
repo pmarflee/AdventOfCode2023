@@ -8,30 +8,31 @@ public class Day8 : IDay
         Right = 2
     }
 
-    public class Desert(List<Instruction> instructions,
-                           IDictionary<string, (string, string)> network)
+    public record Documents(IList<Instruction> Instructions,
+                            IDictionary<string, (string, string)> Network);
+
+    class Navigator(Documents documents, string startNode)
     {
-        private readonly List<Instruction> _instructions = instructions;
-        private readonly IDictionary<string, (string, string)> _network = network;
+        private readonly Documents _documents = documents;
 
         private int _index = 0;
 
-        public string CurrentNode { get; private set; } = "AAA";
+        public string CurrentNode { get; private set; } = startNode;
 
         public int Steps { get; private set; }
 
         public void Navigate()
         {
-            var (left, right) = _network[CurrentNode];
+            var (left, right) = _documents.Network[CurrentNode];
 
-            CurrentNode = _instructions[_index] switch
+            CurrentNode = _documents.Instructions[_index] switch
             {
                 Instruction.Left => left,
                 Instruction.Right => right,
                 _ => throw new NotImplementedException()
             };
 
-            _index = (_index + 1) % _instructions.Count;
+            _index = (_index + 1) % _documents.Instructions.Count;
 
             Steps++;
         }
@@ -39,14 +40,15 @@ public class Day8 : IDay
 
     public static string SolvePart1(string input)
     {
-        var desert = ParseInput(input);
+        var documents = ParseInput(input);
+        var navigator = new Navigator(documents, "AAA");
 
-        while (desert.CurrentNode != "ZZZ")
+        while (navigator.CurrentNode != "ZZZ")
         {
-            desert.Navigate();
+            navigator.Navigate();
         }
 
-        return desert.Steps.ToString();
+        return navigator.Steps.ToString();
     }
 
     public static string SolvePart2(string input)
@@ -54,11 +56,11 @@ public class Day8 : IDay
         throw new NotImplementedException();
     }
 
-    public static Desert ParseInput(string input) => Parser.Parse(input);
+    public static Documents ParseInput(string input) => Parser.Parse(input);
 
     static class Parser
     {
-        static readonly Parser<Desert> Input;
+        static readonly Parser<Documents> Input;
 
         static Parser()
         {
@@ -74,9 +76,9 @@ public class Day8 : IDay
 
             Input = instructions
                 .AndSkip(Literals.WhiteSpace(true))
-                .And(network).Then(p => new Desert(p.Item1, p.Item2));
+                .And(network).Then(p => new Documents(p.Item1, p.Item2));
         }
 
-        public static Desert Parse(string input) => Input.Parse(input);
+        public static Documents Parse(string input) => Input.Parse(input);
     }
 }
