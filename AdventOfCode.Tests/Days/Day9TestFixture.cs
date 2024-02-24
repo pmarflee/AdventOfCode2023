@@ -37,4 +37,10 @@ public class Day9TestFixture
     {
         SolvePart1(Input).Should().Be("114");
     }
+
+    [Fact]
+    public void TestPart2()
+    {
+        SolvePart2(Input).Should().Be("2");
+    }
 }

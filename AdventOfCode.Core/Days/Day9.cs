@@ -4,49 +4,106 @@ public class Day9 : IDay
 {
     public static string SolvePart1(string input)
     {
-        var lines = Parse(input);
-        var sum = 0L;
+        return new Part1Solver(input).Solve();
+    }
 
-        foreach (var line in lines)
+    public static string SolvePart2(string input)
+    {
+        return new Part2Solver(input).Solve();
+    }
+
+    public static List<LinkedList<long>> Parse(string input)
+    {
+        var parser = OneOrMany(Terms.Integer(NumberOptions.AllowSign))
+            .Then(list => new LinkedList<long>(list));
+
+        return input.SplitLines(StringSplitOptions.RemoveEmptyEntries).Select(parser.Parse).ToList();
+    }
+
+    abstract class Solver(string input)
+    {
+        public string Solve()
         {
-            List<List<long>> diffs = [ line ];
-            List<long> diff;
+            return (from line in Parse(input)
+                    let diffs = CreateDiffs(line)
+                    select Solve(diffs)).Sum().ToString();
+        }
+
+        long Solve(List<LinkedList<long>> diffs)
+        {
+            var diff = diffs[^1];
+
+            AddValue(diff, 0);
+
+            for (var i = diffs.Count - 2; i >= 0; i--)
+            {
+                diff = diffs[i];
+                var previous = diffs[i + 1];
+
+                AddValue(diff, previous);
+            }
+
+            return GetValue(diff);
+        }
+
+        private static List<LinkedList<long>> CreateDiffs(LinkedList<long> line)
+        {
+            List<LinkedList<long>> diffs = [ line ];
+            LinkedList<long> diff;
             var previous = line;
 
             do
             {
-                diff = previous.OverlappingPairs().Select(pair => pair.Item2 - pair.Item1).ToList();
+                diff = new LinkedList<long>(previous.OverlappingPairs().Select(pair => pair.Item2 - pair.Item1));
 
                 diffs.Add(diff);
 
                 previous = diff;
             } while (diff.Any(number => number != 0));
 
-            diff.Add(0);
-
-            for (var i = diffs.Count - 2; i >= 0; i--)
-            {
-                diff = diffs[i];
-                previous = diffs[i + 1];
-
-                diff.Add(diff[^1] + previous[^1]);
-            }
-
-            sum += diff[^1];
+            return diffs;
         }
 
-        return sum.ToString();
+        protected abstract void AddValue(LinkedList<long> diff, long value);
+
+        protected abstract void AddValue(LinkedList<long> diff, LinkedList<long> previous);
+
+        protected abstract long GetValue(LinkedList<long> diff);
     }
 
-    public static string SolvePart2(string input)
+    class Part1Solver(string input) : Solver(input)
     {
-        throw new NotImplementedException();
+        protected override void AddValue(LinkedList<long> diff, long value)
+        {
+            diff.AddLast(value);
+        }
+
+        protected override void AddValue(LinkedList<long> diff, LinkedList<long> previous)
+        {
+            diff.AddLast(diff.Last!.Value + previous.Last!.Value);
+        }
+
+        protected override long GetValue(LinkedList<long> diff)
+        {
+            return diff.Last!.Value;
+        }
     }
 
-    public static List<List<long>> Parse(string input)
+    class Part2Solver(string input) : Solver(input)
     {
-        var parser = OneOrMany(Terms.Integer(NumberOptions.AllowSign));
+        protected override void AddValue(LinkedList<long> diff, long value)
+        {
+            diff.AddFirst(value);
+        }
 
-        return input.SplitLines(StringSplitOptions.RemoveEmptyEntries).Select(parser.Parse).ToList();
+        protected override void AddValue(LinkedList<long> diff, LinkedList<long> previous)
+        {
+            diff.AddFirst(diff.First!.Value - previous.First!.Value);
+        }
+
+        protected override long GetValue(LinkedList<long> diff)
+        {
+            return diff.First!.Value;
+        }
     }
 }
