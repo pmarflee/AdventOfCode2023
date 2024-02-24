@@ -26,7 +26,7 @@ public class Day5 : IDay
         var almanac = ParseInput(input);
 
         return almanac.SeedNumbers
-            .Pairwise()
+            .NonOverlappingPairs()
             .SelectMany(pair => almanac.Maps.Aggregate(
                 new List<(long, long)> { pair },
                 (pairs, map) =>
