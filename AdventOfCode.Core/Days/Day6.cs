@@ -79,8 +79,8 @@ public class Day6 : IDay
             InputPart2 = time.And(distance).Then(p => new Race(p.Item1, p.Item2));
         }
 
-        public static List<Race> ParsePart1(string input) => InputPart1.Parse(input);
+        public static List<Race> ParsePart1(string input) => InputPart1.Parse(input)!;
 
-        public static Race ParsePart2(string input) => InputPart2.Parse(input);
+        public static Race ParsePart2(string input) => InputPart2.Parse(input)!;
     }
 }

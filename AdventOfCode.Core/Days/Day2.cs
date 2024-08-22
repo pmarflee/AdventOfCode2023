@@ -48,7 +48,7 @@ public class Day2 : IDay
 
     public record Cubes(Colour Colour, long Amount);
 
-    public record Selection(List<Cubes> Cubes)
+    public record Selection(IReadOnlyList<Cubes> Cubes)
     {
         public long TotalRed => Total(Colour.Red);
         public long TotalBlue => Total(Colour.Blue);
@@ -57,7 +57,7 @@ public class Day2 : IDay
         private long Total(Colour colour) => Cubes.FirstOrDefault(c => c.Colour == colour)?.Amount ?? 0;
     }
 
-    public record Game(long Number, List<Selection> Selections);
+    public record Game(long Number, IReadOnlyList<Selection> Selections);
 
     static class Parser
     {
@@ -80,6 +80,6 @@ public class Day2 : IDay
             Game = game;
         }
 
-        public static Game Parse(string input) => Game.Parse(input);
+        public static Game Parse(string input) => Game.Parse(input)!;
     }
 }

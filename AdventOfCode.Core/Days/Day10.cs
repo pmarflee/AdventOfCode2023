@@ -74,9 +74,9 @@ public class Day10 : IDay
         public static readonly Start Instance = new();
     }
 
-    public class Grid(List<List<Tile>> lines)
+    public class Grid(IReadOnlyList<IReadOnlyList<Tile>> lines)
     {
-        public List<List<Tile>> Lines => lines;
+        public IReadOnlyList<IReadOnlyList<Tile>> Lines => lines;
 
         public Tile this[int x, int y]
         {
@@ -97,7 +97,7 @@ public class Day10 : IDay
         throw new NotImplementedException();
     }
 
-    public static Grid Parse(string input) => Parser.Grid.Parse(input);
+    public static Grid Parse(string input) => Parser.Grid.Parse(input)!;
 
     static class Parser
     {

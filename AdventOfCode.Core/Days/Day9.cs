@@ -14,10 +14,10 @@ public class Day9 : IDay
 
     public static List<LinkedList<long>> Parse(string input)
     {
-        var parser = OneOrMany(Terms.Integer(NumberOptions.AllowSign))
+        var parser = OneOrMany(Terms.Integer(NumberOptions.AllowLeadingSign))
             .Then(list => new LinkedList<long>(list));
 
-        return input.SplitLines(StringSplitOptions.RemoveEmptyEntries).Select(parser.Parse).ToList();
+        return input.SplitLines(StringSplitOptions.RemoveEmptyEntries).Select(parser.Parse).ToList()!;
     }
 
     abstract class Solver(string input)

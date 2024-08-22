@@ -8,7 +8,7 @@ public class Day8 : IDay
         Right = 2
     }
 
-    public record Documents(IList<Instruction> Instructions,
+    public record Documents(IReadOnlyList<Instruction> Instructions,
                             IDictionary<string, (string, string)> Network);
 
     abstract class Navigator(Documents documents)
@@ -122,6 +122,6 @@ public class Day8 : IDay
                 .And(network).Then(p => new Documents(p.Item1, p.Item2));
         }
 
-        public static Documents Parse(string input) => Input.Parse(input);
+        public static Documents Parse(string input) => Input.Parse(input)!;
     }
 }

@@ -99,7 +99,7 @@ public class Day7 : IDay
             .ToString();
     }
 
-    public static List<Hand> ParseInput(string input) => Parser.Parse(input);
+    public static IReadOnlyList<Hand> ParseInput(string input) => Parser.Parse(input);
 
     class HandComparer(ITypeGrouper typeGrouper, IComparer<Card> secondOrderingRuleComparer) : Comparer<Hand>
     {
@@ -147,11 +147,10 @@ public class Day7 : IDay
     {
         public List<int> Group(List<Card> cards)
         {
-            return cards
+            return [.. cards
                 .GroupBy(c => c)
                 .Select(g => g.Count())
-                .OrderByDescending(c => c)
-                .ToList();
+                .OrderByDescending(c => c)];
         }
     }
 
@@ -200,7 +199,7 @@ public class Day7 : IDay
 
     static class Parser
     {
-        static readonly Parser<List<Hand>> Input;
+        static readonly Parser<IReadOnlyList<Hand>> Input;
 
         static Parser()
         {
@@ -211,6 +210,6 @@ public class Day7 : IDay
                 .Then(p => new Hand(p.Item1, p.Item2)));
         }
 
-        public static List<Hand> Parse(string input) => Input.Parse(input);
+        public static IReadOnlyList<Hand> Parse(string input) => Input.Parse(input)!;
     }
 }

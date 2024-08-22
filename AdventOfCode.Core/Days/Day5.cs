@@ -1,6 +1,4 @@
-﻿using System.Net.Sockets;
-
-namespace AdventOfCode.Core.Days;
+﻿namespace AdventOfCode.Core.Days;
 
 public class Day5 : IDay
 {
@@ -83,7 +81,7 @@ public class Day5 : IDay
 
     public record Map(string Name, List<Line> Lines);
 
-    public record Almanac(List<long> SeedNumbers, List<Map> Maps);
+    public record Almanac(IReadOnlyList<long> SeedNumbers, IReadOnlyList<Map> Maps);
 
     class Parser
     {
@@ -105,6 +103,6 @@ public class Day5 : IDay
             Input = seeds.AndSkip(Literals.WhiteSpace(true)).And(Separated(Literals.WhiteSpace(true), map)).Then(p => new Almanac(p.Item1, p.Item2));
         }
 
-        public static Almanac Parse(string input) => Input.Parse(input);
+        public static Almanac Parse(string input) => Input.Parse(input)!;
     }
 }
